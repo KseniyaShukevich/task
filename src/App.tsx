@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Box from '@material-ui/core/Box';
 import useStyles from './styles';
+import Result from './components/Result';
+import SearchSubstr from './components/SearchSubstr';
+import SearchByLength from './components/SearchByLength';
+import Input from './components/Input';
+import MyCheckbox from './components/MyCheckbox';
 
 function App() {
   const classes = useStyles();
@@ -19,53 +20,6 @@ function App() {
   const resetError = (): void => {
     setIsError(false);
     setHelperText('');
-  }
-
-  const changCaseSensitive = (): void => {
-    setIsCaseSensitive((prev) => !prev);
-  }
-
-  const changeInputValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
-    setInput(event.target.value);
-    resetError();
-  }
-
-  const filterLengthStr = (): void => {
-    if (!isNaN(+input)) {
-      resetError();
-      const result: Array<string> = words!.filter((word: string) => {
-        if (word.length > +input) {
-          return word;
-        }
-      });
-      setSearchWords(result);
-    } else {
-      setIsError(true);
-      setHelperText('Вы ввели строку, а не число');
-    }
-  }
-
-  const filterBySubstr = (): void => {
-    if (isNaN(+input)) {
-      resetError();
-      const result: Array<string> = words!.filter((word: string) => {
-        if (isCaseSensitive) {
-          if (word.includes(input)) {
-            return word;
-          }
-        } else {
-          const newWord = word.toLowerCase();
-          const subStr = input.toLowerCase();
-          if (newWord.includes(subStr)) {
-            return word;
-          }
-        }
-      });
-      setSearchWords(result);
-    } else {
-      setIsError(true);
-      setHelperText('Вы ввели число, а не строку');
-    }
   }
 
   const getData = async (): Promise<void> => {
@@ -83,57 +37,47 @@ function App() {
     <Container className={classes.container}>
       <form noValidate autoComplete="off">
         <Box className={classes.box}>
-          <TextField
-            value={input}
-            onChange={changeInputValue}
-            className={classes.input}
-            id="standard-basic"
-            label="Строка или число"
-            error={isError}
+          <Input
+            classStyle={classes.input}
+            input={input}
+            isError={isError}
             helperText={helperText}
+            resetError={resetError}
+            setInput={setInput}
           />
           <Box className={classes.boxButtons}>
-            <Button
-              className={classes.buttonLeft}
-              variant="contained"
-              color="primary"
-              onClick={filterBySubstr}
-            >
-              Фильтр по подстроке
-            </Button>
-            <Button
-              className={classes.buttonRight}
-              variant="contained"
-              color="primary"
-              onClick={filterLengthStr}
-            >
-              Фильтр по длине слов
-            </Button>
+            <SearchSubstr
+              classStyle={classes.buttonLeft}
+              words={words}
+              isCaseSensitive={isCaseSensitive}
+              input={input}
+              resetError={resetError}
+              setIsError={setIsError}
+              setHelperText={setHelperText}
+              setSearchWords={setSearchWords}
+            />
+            <SearchByLength
+              classStyle={classes.buttonRight}
+              words={words}
+              input={input}
+              resetError={resetError}
+              setIsError={setIsError}
+              setHelperText={setHelperText}
+              setSearchWords={setSearchWords}
+            />
           </Box>
         </Box>
         <Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                color="primary"
-                checked={isCaseSensitive}
-                onChange={changCaseSensitive}
-              />
-            }
-            label="Чувствительность к регистру"
+          <MyCheckbox
+            isCaseSensitive={isCaseSensitive}
+            setIsCaseSensitive={setIsCaseSensitive}
           />
         </Box>
       </form>
-      <Box className={classes.results}>
-        {(searchWords && searchWords.length)
-          ?
-          (
-            searchWords.map((word: any) => <div key={word}>{word}<hr/></div>)
-          ) : (
-            <div>Ничего не найдено</div>
-          )
-        }
-      </Box>
+      <Result
+        classStyle={classes.results}
+        searchWords={searchWords}
+      />
     </Container>
   );
 }
