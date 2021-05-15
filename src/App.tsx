@@ -13,6 +13,13 @@ function App() {
   const [words, setWords] = useState<null | Array<string>>(null);
   const [searchWords, setSearchWords] = useState<null | Array<string>>(null);
   const [input, setInput] = useState<string>('');
+  const [isError, setIsError] = useState<boolean>(false);
+  const [helperText, setHelperText] = useState<string>('');
+
+  const resetError = (): void => {
+    setIsError(false);
+    setHelperText('');
+  }
 
   const changCaseSensitive = (): void => {
     setIsCaseSensitive((prev) => !prev);
@@ -20,16 +27,44 @@ function App() {
 
   const changeInputValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     setInput(event.target.value);
+    resetError();
   }
 
   const filterLengthStr = (): void => {
     if (!isNaN(+input)) {
+      resetError();
       const result: Array<string> = words!.filter((word: string) => {
         if (word.length > +input) {
           return word;
         }
       });
       setSearchWords(result);
+    } else {
+      setIsError(true);
+      setHelperText('Вы ввели строку, а не число');
+    }
+  }
+
+  const filterBySubstr = (): void => {
+    if (isNaN(+input)) {
+      resetError();
+      const result: Array<string> = words!.filter((word: string) => {
+        if (isCaseSensitive) {
+          if (word.includes(input)) {
+            return word;
+          }
+        } else {
+          const newWord = word.toLowerCase();
+          const subStr = input.toLowerCase();
+          if (newWord.includes(subStr)) {
+            return word;
+          }
+        }
+      });
+      setSearchWords(result);
+    } else {
+      setIsError(true);
+      setHelperText('Вы ввели число, а не строку');
     }
   }
 
@@ -54,12 +89,15 @@ function App() {
             className={classes.input}
             id="standard-basic"
             label="Строка или число"
+            error={isError}
+            helperText={helperText}
           />
           <Box className={classes.boxButtons}>
             <Button
               className={classes.buttonLeft}
               variant="contained"
               color="primary"
+              onClick={filterBySubstr}
             >
               Фильтр по подстроке
             </Button>
@@ -87,8 +125,12 @@ function App() {
         </Box>
       </form>
       <Box className={classes.results}>
-        {searchWords && (
+        {(searchWords && searchWords.length)
+          ?
+          (
             searchWords.map((word: any) => <div key={word}>{word}<hr/></div>)
+          ) : (
+            <div>Ничего не найдено</div>
           )
         }
       </Box>
