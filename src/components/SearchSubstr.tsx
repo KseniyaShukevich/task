@@ -35,6 +35,7 @@ const SearchSubstr: React.FC<IProps> = ({
           return word;
         }
       }
+      return false;
     });
   }
 

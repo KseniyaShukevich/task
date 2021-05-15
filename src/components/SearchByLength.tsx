@@ -23,11 +23,7 @@ const SearchSubstr: React.FC<IProps> = ({
   const filterLengthStr = (): void => {
     if (!isNaN(+input)) {
       resetError();
-      const result: Array<string> = words!.filter((word: string) => {
-        if (word.length > +input) {
-          return word;
-        }
-      });
+      const result: Array<string> = words!.filter((word: string) => word.length > +input);
       setSearchWords(result);
     } else {
       setIsError(true);
