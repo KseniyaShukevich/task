@@ -27,6 +27,7 @@ const Input: React.FC<IProps> = ({
     <TextField
       value={input}
       onChange={changeInputValue}
+      style={{marginBottom: '20px'}}
       className={classStyle}
       id="standard-basic"
       label="Строка или число"

@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       [theme.breakpoints.down(660)]: {
         width: '100%',
-        marginBottom: theme.spacing(2),
       },
     },
     box: {
