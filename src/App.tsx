@@ -12,9 +12,25 @@ function App() {
   const [isCaseSensitive, setIsCaseSensitive] = useState<boolean>(false);
   const [words, setWords] = useState<null | Array<string>>(null);
   const [searchWords, setSearchWords] = useState<null | Array<string>>(null);
+  const [input, setInput] = useState<string>('');
 
   const changCaseSensitive = (): void => {
     setIsCaseSensitive((prev) => !prev);
+  }
+
+  const changeInputValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+    setInput(event.target.value);
+  }
+
+  const filterLengthStr = (): void => {
+    if (!isNaN(+input)) {
+      const result: Array<string> = words!.filter((word: string) => {
+        if (word.length > +input) {
+          return word;
+        }
+      });
+      setSearchWords(result);
+    }
   }
 
   const getData = async (): Promise<void> => {
@@ -32,26 +48,47 @@ function App() {
     <Container className={classes.container}>
       <form noValidate autoComplete="off">
         <Box className={classes.box}>
-          <TextField className={classes.input} id="standard-basic" label="Строка или число" />
+          <TextField
+            value={input}
+            onChange={changeInputValue}
+            className={classes.input}
+            id="standard-basic"
+            label="Строка или число"
+          />
           <Box className={classes.boxButtons}>
-            <Button className={classes.buttonLeft} variant="contained" color="primary">
+            <Button
+              className={classes.buttonLeft}
+              variant="contained"
+              color="primary"
+            >
               Фильтр по подстроке
             </Button>
-            <Button className={classes.buttonRight} variant="contained" color="primary">
+            <Button
+              className={classes.buttonRight}
+              variant="contained"
+              color="primary"
+              onClick={filterLengthStr}
+            >
               Фильтр по длине слов
             </Button>
           </Box>
         </Box>
         <Box>
           <FormControlLabel
-            control={<Checkbox color="primary" checked={isCaseSensitive} onChange={changCaseSensitive} />}
+            control={
+              <Checkbox
+                color="primary"
+                checked={isCaseSensitive}
+                onChange={changCaseSensitive}
+              />
+            }
             label="Чувствительность к регистру"
           />
         </Box>
       </form>
       <Box className={classes.results}>
         {searchWords && (
-            searchWords.map((word: any) => <><div key={word}>{word}</div><hr/></>)
+            searchWords.map((word: any) => <div key={word}>{word}<hr/></div>)
           )
         }
       </Box>
