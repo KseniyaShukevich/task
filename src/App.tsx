@@ -23,7 +23,7 @@ function App() {
   }
 
   const getData = async (): Promise<void> => {
-    const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.mrsoft.by/data.json');
+    const response = await fetch('https://infinite-brook-27178.herokuapp.com/https://www.mrsoft.by/data.json');
     const data = await response.json();
     setWords(data.data);
     setSearchWords(data.data);
