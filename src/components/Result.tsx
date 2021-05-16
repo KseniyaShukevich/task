@@ -3,16 +3,16 @@ import Box from '@material-ui/core/Box';
 
 interface IProps {
   classStyle: any
-  searchWords: Array<string> | null
+  foundedWords: Array<string> | null
 }
 
-const Result: React.FC<IProps> = ({ classStyle, searchWords }) => {
+const Result: React.FC<IProps> = ({ classStyle, foundedWords }) => {
   return (
     <Box className={classStyle}>
-      {(searchWords && searchWords.length)
+      {(foundedWords && foundedWords.length)
         ?
         (
-          searchWords.map((word: any) => <div key={word}>{word}<hr/></div>)
+          foundedWords.map((word: any) => <div key={word}>{word}<hr/></div>)
         ) : (
           <div>Ничего не найдено</div>
         )

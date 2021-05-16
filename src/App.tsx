@@ -12,7 +12,7 @@ function App() {
   const classes = useStyles();
   const [isCaseSensitive, setIsCaseSensitive] = useState<boolean>(false);
   const [words, setWords] = useState<null | Array<string>>(null);
-  const [searchWords, setSearchWords] = useState<null | Array<string>>(null);
+  const [foundedWords, setFoundedWords] = useState<null | Array<string>>(null);
   const [input, setInput] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
   const [helperText, setHelperText] = useState<string>('');
@@ -26,7 +26,7 @@ function App() {
     const response = await fetch('https://infinite-brook-27178.herokuapp.com/https://www.mrsoft.by/data.json');
     const data = await response.json();
     setWords(data.data);
-    setSearchWords(data.data);
+    setFoundedWords(data.data);
   }
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function App() {
               resetError={resetError}
               setIsError={setIsError}
               setHelperText={setHelperText}
-              setSearchWords={setSearchWords}
+              setFoundedWords={setFoundedWords}
             />
             <SearchByLength
               classStyle={classes.buttonRight}
@@ -63,7 +63,7 @@ function App() {
               resetError={resetError}
               setIsError={setIsError}
               setHelperText={setHelperText}
-              setSearchWords={setSearchWords}
+              setFoundedWords={setFoundedWords}
             />
           </Box>
         </Box>
@@ -76,7 +76,7 @@ function App() {
       </form>
       <Result
         classStyle={classes.results}
-        searchWords={searchWords}
+        foundedWords={foundedWords}
       />
     </Container>
   );
