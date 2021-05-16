@@ -8,7 +8,7 @@ interface IProps {
   resetError: () => void
   setIsError: (value: boolean) => void
   setHelperText: (value: string) => void
-  setSearchWords: (value: Array<string> | null) => void
+  setFoundedWords: (value: Array<string> | null) => void
 }
 
 const SearchSubstr: React.FC<IProps> = ({
@@ -18,13 +18,13 @@ const SearchSubstr: React.FC<IProps> = ({
   resetError,
   setIsError,
   setHelperText,
-  setSearchWords
+  setFoundedWords
 }) => {
   const filterLengthStr = (): void => {
     if (!isNaN(+input)) {
       resetError();
       const result: Array<string> = words!.filter((word: string) => word.length > +input);
-      setSearchWords(result);
+      setFoundedWords(result);
     } else {
       setIsError(true);
       setHelperText('Вы ввели строку, а не число');

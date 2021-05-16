@@ -9,7 +9,7 @@ interface IProps {
   resetError: () => void
   setIsError: (value: boolean) => void
   setHelperText: (value: string) => void
-  setSearchWords: (value: Array<string> | null) => void
+  setFoundedWords: (value: Array<string> | null) => void
 }
 
 const SearchSubstr: React.FC<IProps> = ({
@@ -20,7 +20,7 @@ const SearchSubstr: React.FC<IProps> = ({
   resetError,
   setIsError,
   setHelperText,
-  setSearchWords
+  setFoundedWords
 }) => {
   const getBySubstr = (): Array<string> => {
     return words!.filter((word: string) => {
@@ -43,7 +43,7 @@ const SearchSubstr: React.FC<IProps> = ({
     if (input === '' || isNaN(+input)) {
       resetError();
       const result: Array<string> = getBySubstr();
-      setSearchWords(result);
+      setFoundedWords(result);
     } else {
       setIsError(true);
       setHelperText('Вы ввели число, а не строку');
